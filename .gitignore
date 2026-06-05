@@ -1,0 +1,18 @@
+# DLLs
+*.dll
+
+# Modelo entrenado
+*.pkl
+
+# Dataset de señales (archivos grandes)
+dataset/
+
+# GNU Radio
+*.grc
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Archivos temporales
+*.py.bak
