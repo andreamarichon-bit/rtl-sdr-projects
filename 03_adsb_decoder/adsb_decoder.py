@@ -4,8 +4,8 @@ from rtlsdr import RtlSdr
 import struct
 import time
 
-# ─── Configuración del SDR ───────────────────────────────────────────────────
-# Reset automático
+# SDR configuration 
+# Automatic reset
 try:
     sdr = RtlSdr()
     sdr.close()
@@ -19,25 +19,24 @@ sdr.sample_rate = 2.0e6
 sdr.center_freq = 1090e6
 sdr.gain = 40
 time.sleep(0.5)
-# ─────────────────────────────────────────────────────────────────────────────
 
 def demodulate_am(samples):
-    """Convierte IQ samples a magnitud (AM envelope)."""
+    """Converts IQ samples to magnitude (AM envelope)."""
     return np.abs(samples)
 
 def detect_preamble(signal, threshold):
     """
-    Detecta el preámbulo ADS-B: pulsos en posiciones 0,2,7,9 microsegundos.
-    A 2 MHz cada muestra = 0.5 us → posiciones 0,4,14,18 muestras.
+    Detects the ADS-B preamble: pulses at positions 0,2,7,9 microseconds.
+    At 2 MHz each sample = 0.5 us → positions 0,4,14,18 samples.
     """
     preamble_positions = []
-    min_gap = 240  # mínimo gap entre mensajes (~120 us)
+    min_gap = 240  # minimum gap between messages (~120 us)
     last = -min_gap
 
     for i in range(len(signal) - 240):
         if i - last < min_gap:
             continue
-        # Verificar patrón de preámbulo
+        # Verfy preamble pattern
         p = signal[i:i+20]
         if (p[0] > threshold and p[4] > threshold and
             p[14] > threshold and p[18] > threshold and
@@ -50,11 +49,11 @@ def detect_preamble(signal, threshold):
 
 def extract_bits(signal, start):
     """
-    Extrae 112 bits usando Manchester decoding.
-    Cada bit ocupa 2 muestras a 2 MHz (1 us por half-bit).
+    Extracts 112 bits using Manchester decoding.
+    Each bit occupies 2 samples at 2 MHz (1 us per half-bit).
     """
     bits = []
-    # El mensaje empieza 16 muestras después del inicio del preámbulo
+    # The message starts 16 samples after the preamble
     msg_start = start + 16
     for i in range(112):
         s0 = signal[msg_start + i*2]
@@ -68,7 +67,7 @@ def extract_bits(signal, start):
     return bits
 
 def bits_to_hex(bits):
-    """Convierte lista de bits a string hexadecimal."""
+    """Converts a list of bits to a hexadecimal string."""
     hex_str = ''
     for i in range(0, len(bits), 8):
         byte = bits[i:i+8]
@@ -78,7 +77,7 @@ def bits_to_hex(bits):
     return hex_str
 
 def decode_message(bits):
-    """Decodifica campos básicos de un mensaje ADS-B."""
+    """Decodes basic fields of an ADS-B message."""
     if len(bits) < 112:
         return None
 
@@ -95,7 +94,7 @@ def decode_message(bits):
 
     result = {'df': df, 'icao': icao, 'tc': tc}
 
-    # Identificación del vuelo (TC 1-4)
+    # Identification of the flight (TC 1-4)
     if 1 <= tc <= 4:
         charset = '@ABCDEFGHIJKLMNOPQRSTUVWXYZ                 0123456789      '
         callsign = ''
@@ -104,7 +103,7 @@ def decode_message(bits):
             callsign += charset[idx] if idx < len(charset) else '?'
         result['callsign'] = callsign.strip()
 
-    # Altitud (TC 9-18)
+    # Altitude (TC 9-18)
     elif 9 <= tc <= 18:
         alt_bits = bits[40:52]
         m_bit = alt_bits[6]
@@ -116,9 +115,8 @@ def decode_message(bits):
 
     return result
 
-# ─── Captura y procesamiento ─────────────────────────────────────────────────
-print("Capturando señal ADS-B en 1090 MHz...")
-print("(Necesitas estar cerca de un aeropuerto o zona con tráfico aéreo)\n")
+# Capture and Processing
+print("Capturing ADS-B signal at 1090 MHz...")
 
 all_messages = {}
 CAPTURAS = 999999
@@ -141,24 +139,24 @@ for cap in range(CAPTURAS):
                 all_messages[icao] = msg
                 print(f"  DF:{msg['df']} | ICAO:{icao} | TC:{msg['tc']}", end='')
                 if 'callsign' in msg:
-                    print(f" | Vuelo: {msg['callsign']}", end='')
+                    print(f" | Flight: {msg['callsign']}", end='')
                 if 'altitude_ft' in msg:
-                    print(f" | Alt: {msg['altitude_ft']} ft", end='')
+                    print(f" | Altitude: {msg['altitude_ft']} ft", end='')
                 print()
 
     if (cap+1) % 5 == 0:
-        print(f"  [{cap+1}/{CAPTURAS} bloques procesados — {len(all_messages)} aviones únicos]")
+        print(f"  [{cap+1}/{CAPTURAS} blocks processed — {len(all_messages)} unique aircrafts]")
 
 sdr.close()
 
-# ─── Reporte final ───────────────────────────────────────────────────────────
+# Final Report
 print(f"\n{'='*50}")
-print(f"AVIONES DETECTADOS: {len(all_messages)}")
+print(f"AIRCRAFT DETECTED: {len(all_messages)}")
 print(f"{'='*50}")
 for icao, msg in all_messages.items():
     print(f"  ICAO: {icao}  TC:{msg['tc']}", end='')
     if 'callsign' in msg:
-        print(f"  Vuelo: {msg['callsign']}", end='')
+        print(f"  Flight: {msg['callsign']}", end='')
     if 'altitude_ft' in msg:
-        print(f"  Altitud: {msg['altitude_ft']} ft", end='')
+        print(f"  Altitude: {msg['altitude_ft']} ft", end='')
     print()

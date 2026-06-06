@@ -13,7 +13,7 @@ step       = 2e6
 freqs_mhz = []
 powers_db  = []
 
-print("Escaneando espectro FM...")
+print("Scanning FM spectrum...")
 
 freq = freq_start
 while freq <= freq_end:
@@ -26,7 +26,7 @@ while freq <= freq_end:
                                     len(psd))
     freqs_mhz.extend(bin_freqs / 1e6)
     powers_db.extend(psd)
-    print(f"  {freq/1e6:.1f} MHz — pico: {max(psd):.1f} dB")
+    print(f"  {freq/1e6:.1f} MHz — peak: {max(psd):.1f} dB")
     freq += step
 
 sdr.close()
@@ -37,23 +37,23 @@ idx = np.argsort(freqs_mhz)
 freqs_mhz = freqs_mhz[idx]
 powers_db  = powers_db[idx]
 
-# Threshold más alto para filtrar ruido
+# Higher threshold for noise filtering
 noise_floor = np.percentile(powers_db, 20)
-threshold   = noise_floor + 25  # subimos de 15 a 25 dB
+threshold   = noise_floor + 25  # increased it from 15 to 25 dB
 
-# Detectar picos con separación mínima de 0.15 MHz entre estaciones
+# Detect peaks with a minimum separation of 0.15 MHz between stations
 peaks = []
 i = 1
 while i < len(powers_db) - 1:
     if (powers_db[i] > threshold and
         powers_db[i] > powers_db[i-1] and
         powers_db[i] > powers_db[i+1]):
-        # Evitar duplicados cercanos
+        # Avoid nearby duplicates
         if not peaks or abs(freqs_mhz[i] - peaks[-1][0]) > 0.15:
             peaks.append((freqs_mhz[i], powers_db[i]))
     i += 1
 
-# Grafica limpia
+# Clean graph
 fig, ax = plt.subplots(figsize=(14, 5))
 ax.plot(freqs_mhz, powers_db, linewidth=0.4, color='steelblue')
 ax.axhline(threshold, color='red', linestyle='--',
@@ -65,15 +65,15 @@ for f, p in peaks:
                 fontsize=8, ha='center', color='darkred',
                 arrowprops=dict(arrowstyle='-', color='red', lw=0.5))
 
-ax.set_xlabel('Frecuencia (MHz)')
-ax.set_ylabel('Potencia (dB)')
-ax.set_title('Scanner FM — 88 a 108 MHz')
+ax.set_xlabel('Frequency (MHz)')
+ax.set_ylabel('Power (dB)')
+ax.set_title('FM Scanner — 88 to 108 MHz')
 ax.legend(loc='upper right')
 ax.set_xlim(88, 108)
 plt.tight_layout()
 plt.savefig('fm_scan.png', dpi=150)
 plt.show()
 
-print(f"\nEstaciones detectadas: {len(peaks)}")
+print(f"\nStations detected: {len(peaks)}")
 for f, p in sorted(peaks):
     print(f"  {f:.2f} MHz  —  {p:.1f} dB")
