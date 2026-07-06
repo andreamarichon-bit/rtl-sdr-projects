@@ -1,6 +1,6 @@
 # RTL-SDR Projects
 
-Signal processing projects using a low-cost RTL-SDR dongle and Python. Built from scratch as part of my preparation to contribute to wireless systems research.
+Signal processing projects using a low-cost RTL-SDR dongle and Python.
 
 **Hardware:** RTL-SDR Blog V3 dongle + dipole antenna  
 **Stack:** Python 3.11 · pyrtlsdr · NumPy · SciPy · scikit-learn · Matplotlib
@@ -11,18 +11,12 @@ Signal processing projects using a low-cost RTL-SDR dongle and Python. Built fro
 
 ### 1. FM Spectrum Scanner
 Sweeps the full FM band (88–108 MHz) by capturing IQ samples at 2 MHz steps, computing the power spectral density via FFT, and automatically detecting active stations above a dynamic threshold.
-
-**Key concepts:** IQ sampling · FFT · PSD · threshold detection
-
 ![FM Scanner](images/fm_scan.png)
 
 ---
 
 ### 2. Real-Time Spectrum Sensing + Waterfall
 Continuously captures IQ samples and renders a live dual-panel display: instantaneous spectrum on top, time-frequency waterfall below. Each row of the waterfall is one FFT frame — persistent signals appear as vertical bands.
-
-**Key concepts:** Spectrum sensing · time-frequency analysis · real-time DSP
-
 ![Waterfall](images/waterfall.png)
 
 ---
@@ -35,21 +29,16 @@ Receives Mode S ADS-B transmissions at 1090 MHz without any external decoding li
 4. Parse Downlink Format, ICAO address, altitude, and callsign fields
 
 Detected **71 unique aircraft** in a single session over Tijuana/San Diego airspace.
-
-**Key concepts:** OOK demodulation · Manchester decoding · binary protocol parsing
-
 ![ADS-B Terminal](images/adsb_terminal.png)
 
 ---
 
 ### 4. Automatic Modulation Classifier (AMC)
-Trains a Random Forest classifier to distinguish FM broadcast, ADS-B, and noise from raw IQ samples — no labels at inference time.
-
+Trains a Random Forest classifier to distinguish FM broadcast, ADS-B, and noise from raw IQ samples. No labels at inference time.
 **Feature extraction** (per 1024-sample capture):
 - Time domain: mean magnitude, std, kurtosis, skewness
 - Phase domain: mean and std of unwrapped phase derivative
 - Frequency domain: spectral entropy, spectral std, peak-to-mean ratio
-
 **Results:** 99% accuracy on held-out test set (300 samples, 3 classes)
 
 ![Confusion Matrix](images/confusion_matrix.png)
