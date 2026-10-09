@@ -5,7 +5,7 @@ from rtlsdr import RtlSdr
 
 sdr = RtlSdr()
 sdr.sample_rate = 2.4e6
-sdr.center_freq = 100e6  # at 100 MHz
+sdr.center_freq = 119.0e6  # at 100 MHz
 sdr.gain = 'auto'
 
 NFFT = 1024

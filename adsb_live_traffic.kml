@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>ADS-B Real-Time Flight Tracking - Tijuana</name>
+    <Style id="planeStyle">
+      <IconStyle>
+        <scale>1.2</scale>
+        <Icon><href>http://maps.google.com/mapfiles/kml/shapes/airports.png</href></Icon>
+      </IconStyle>
+      <LineStyle>
+        <color>ff0000ff</color>
+        <width>3</width>
+      </LineStyle>
+    </Style>
+
+    <Placemark>
+      <name>VOI3040</name>
+      <description>
+        ICAO: A6810D
+        Altitud: 8525 ft
+        Velocidad: 287 kt
+        Slant Range: 21.44 km
+        FSPL: 119.8 dB
+      </description>
+      <styleUrl>#planeStyle</styleUrl>
+      <Point>
+        <altitudeMode>absolute</altitudeMode>
+        <coordinates>-116.85086,32.40669,2598.42</coordinates>
+      </Point>
+    </Placemark>
+  </Document>
+</kml>
