@@ -5,14 +5,6 @@ Signal processing projects using a low-cost RTL-SDR dongle and Python.
 <<<<<<< HEAD
 =======
 
-**Hardware:** RTL-SDR Blog V3 dongle + dipole antenna  
-**Stack:** Python 3.11 · pyrtlsdr · NumPy · SciPy · scikit-learn · Matplotlib
-
----
-
->>>>>>> 37b68f2 (Refactor README by removing key concepts sections)
-=======
->>>>>>> 94cdb42 (previous adsb modified to adsb visualizer and kml link for google earth)
 ## Projects
 ---
 ### 1. FM Spectrum Scanner
