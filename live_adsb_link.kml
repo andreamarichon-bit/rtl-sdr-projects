@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Radar ADS-B Tijuana</name>
+    <NetworkLink>
+      <refreshMode>onInterval</refreshMode>
+      <refreshInterval>3</refreshInterval>
+      <link>
+        <href>live.link.kml</href>
+      </link>
+    </NetworkLink>
+  </Document>
+</kml>

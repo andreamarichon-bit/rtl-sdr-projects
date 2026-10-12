@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>ADS-B Real-Time Flight Tracking - Tijuana</name>
+    <Style id="planeStyle">
+      <IconStyle>
+        <scale>1.2</scale>
+        <Icon><href>http://maps.google.com/mapfiles/kml/shapes/airports.png</href></Icon>
+      </IconStyle>
+      <LineStyle>
+        <color>ff0000ff</color>
+        <width>3</width>
+      </LineStyle>
+    </Style>
+
+    <Placemark>
+      <name>VOI3389</name>
+      <description>
+        ICAO: 0D0D41
+        Altitud: 2200 ft
+        Velocidad: 149 kt
+        Slant Range: 16.95 km
+        FSPL: 117.8 dB
+      </description>
+      <styleUrl>#planeStyle</styleUrl>
+      <Point>
+        <altitudeMode>absolute</altitudeMode>
+        <coordinates>-116.85778,32.50639,670.5600000000001</coordinates>
+      </Point>
+    </Placemark>
+
+    <Placemark>
+      <name>TAM8087</name>
+      <description>
+        ICAO: E80447
+        Altitud: 29500 ft
+        Velocidad: 558 kt
+        Slant Range: 76.48 km
+        FSPL: 130.9 dB
+      </description>
+      <styleUrl>#planeStyle</styleUrl>
+      <Point>
+        <altitudeMode>absolute</altitudeMode>
+        <coordinates>-116.29929,32.79721,8991.6</coordinates>
+      </Point>
+    </Placemark>
+
+    <Placemark>
+      <name>N9150M</name>
+      <description>
+        ICAO: ACABA2
+        Altitud: 8300 ft
+        Velocidad: 55 kt
+        Slant Range: 6.88 km
+        FSPL: 109.9 dB
+      </description>
+      <styleUrl>#planeStyle</styleUrl>
+      <Point>
+        <altitudeMode>absolute</altitudeMode>
+        <coordinates>-117.00121,32.5638,2529.84</coordinates>
+      </Point>
+    </Placemark>
+
+    <Placemark>
+      <name>N84GL</name>
+      <description>
+        ICAO: AB7E21
+        Altitud: 9175 ft
+        Velocidad: 213 kt
+        Slant Range: 49.16 km
+        FSPL: 127.0 dB
+      </description>
+      <styleUrl>#planeStyle</styleUrl>
+      <Point>
+        <altitudeMode>absolute</altitudeMode>
+        <coordinates>-116.57649,32.72376,2796.54</coordinates>
+      </Point>
+    </Placemark>
+
+    <Placemark>
+      <name>SWA4225</name>
+      <description>
+        ICAO: AC3E13
+        Altitud: 17500 ft
+        Velocidad: 435 kt
+        Slant Range: 25.81 km
+        FSPL: 121.4 dB
+      </description>
+      <styleUrl>#planeStyle</styleUrl>
+      <Point>
+        <altitudeMode>absolute</altitudeMode>
+        <coordinates>-116.83976,32.66904,5334.0</coordinates>
+      </Point>
+    </Placemark>
+  </Document>
+</kml>

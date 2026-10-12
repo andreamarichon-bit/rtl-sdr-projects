@@ -2,7 +2,7 @@ import numpy as np
 from rtlsdr import RtlSdr
 import time
 
-# ─── INICIALIZACIÓN SEGUURA Y LIMPIA ─────────────────────────────────────────
+# Set up the SDR
 try:
     sdr_temp = RtlSdr()
     sdr_temp.close()
@@ -13,16 +13,16 @@ except Exception:
 sdr = RtlSdr()
 time.sleep(0.3)
 
-# Forzar sintonizador R820T normal
+# Configure the SDR for ADS-B reception
 sdr.direct_sampling = 0
 time.sleep(0.2)
 
 sdr.sample_rate = 2.0e6
 sdr.center_freq = 1090e6
-sdr.gain = 28.0  # Ganancia moderada para evitar bloqueos por sobrecarga
+sdr.gain = 28.0  # Gain adjusted to avoid saturation, can be tuned based on environment
 time.sleep(0.5)
 
-# ─── POLINOMIO CRC-24 OFICIAL ADS-B (0xFFFA04) ────────────────────────────────
+# CRC 24 generator polynomial for ADS-B messages
 CRC24_GENERATOR = 0xFFFA04
 
 def crc24(bits):
@@ -120,17 +120,17 @@ def decode_message(bits):
 
     return result
 
-# ─── BUCLE PRINCIPAL DE CAPTURA ───────────────────────────────────────────────
-print("Capturando señales ADS-B a 1090 MHz...")
-print("Validación CRC-24 corregida activa (0xFFFA04)\n")
+# Capture and decode ADS-B messages
+print("Capturing ADS-B signals at 1090 MHz...")
+print("CRC validation active (0xFFFA04)\n")
 
 all_messages = {}
-CAPTURAS = 999999
+CAPTURES = 999999
 
 try:
-    for cap in range(CAPTURAS):
+    for cap in range(CAPTURES):
         try:
-            # Tamaño de buffer seguro a 32k
+            # Buffer 32k samples to ensure we capture complete messages
             samples = sdr.read_samples(32 * 1024)
         except Exception:
             time.sleep(0.05)
@@ -148,7 +148,7 @@ try:
                 icao = msg['icao']
                 if icao not in all_messages:
                     all_messages[icao] = msg
-                    print(f"✈️ DF:{msg['df']} | ICAO:{icao} | TC:{msg['tc']}", end='')
+                    print(f"DF:{msg['df']} | ICAO:{icao} | TC:{msg['tc']}", end='')
                     if 'callsign' in msg:
                         print(f" | Flight: {msg['callsign']}", end='')
                     if 'altitude_ft' in msg:
@@ -156,10 +156,10 @@ try:
                     print()
 
         if (cap+1) % 25 == 0:
-            print(f"  [{cap+1}/{CAPTURAS} bloques procesados — {len(all_messages)} aviones únicos]")
+            print(f"  [{cap+1}/{CAPTURES} processed blocks — {len(all_messages)} unique aircraft detected]")
 
 except KeyboardInterrupt:
-    print("\nCaptura finalizada.")
+    print("\nCapture interrupted by user.")
 finally:
     sdr.close()
-    print("SDR liberado correctamente.")
+    print("SDR released correctly.")
